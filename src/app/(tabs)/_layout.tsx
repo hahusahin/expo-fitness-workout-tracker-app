@@ -50,9 +50,9 @@ export default function TabLayout() {
         options={{
           title: "Profile",
           headerShown: false,
-          // tabBarIcon: ({ color, size }) => (
-          //   <Image source={user?.imageUrl} className="rounded-full w-7 h-7" />
-          // ),
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="user" color={color} size={size} />
+          ),
         }}
       />
     </Tabs>
