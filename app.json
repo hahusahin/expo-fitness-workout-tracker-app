@@ -1,0 +1,35 @@
+{
+  "expo": {
+    "scheme": "exp+fit-app",
+    "userInterfaceStyle": "automatic",
+    "orientation": "default",
+    "web": {
+      "output": "server"
+    },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "origin": "https://n"
+        }
+      ],
+      "expo-web-browser",
+      "expo-secure-store",
+      "expo-font"
+    ],
+    "name": "fit-app",
+    "slug": "workout-tracker-app",
+    "android": {
+      "package": "com.hahusahin.fitapp"
+    },
+    "extra": {
+      "router": {
+        "origin": "https://n"
+      },
+      "eas": {
+        "projectId": "aa52b202-3c30-4138-b3e0-fc4f3f732efc"
+      }
+    },
+    "owner": "hahusahin"
+  }
+}
