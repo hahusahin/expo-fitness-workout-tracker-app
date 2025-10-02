@@ -53,6 +53,12 @@ function AppNavigator() {
             animation: "none",
           }}
         />
+        <Stack.Screen
+          name="fitness-centers"
+          options={{
+            title: "Nearby Fitness Centers",
+          }}
+        />
       </Stack.Protected>
     </Stack>
   );

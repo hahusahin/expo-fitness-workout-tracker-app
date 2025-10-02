@@ -19,3 +19,18 @@ export interface WorkoutPayload {
     }[];
   }[];
 }
+
+export interface FitnessCenter {
+  id: string;
+  name: string;
+  rating?: number;
+  address: string;
+  location: {
+    latitude: number;
+    longitude: number;
+  };
+  photo?: string;
+  phoneNumber?: string;
+  website?: string;
+  openNow?: boolean;
+}

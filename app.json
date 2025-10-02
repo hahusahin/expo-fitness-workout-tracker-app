@@ -20,7 +20,24 @@
     "name": "fit-app",
     "slug": "workout-tracker-app",
     "android": {
-      "package": "com.hahusahin.fitapp"
+      "package": "com.hahusahin.fitapp",
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "config": {
+        "googleMaps": {
+          "apiKey": "$EXPO_PUBLIC_GOOGLE_API_KEY"
+        }
+      }
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs access to your location to find nearby fitness centers and gyms."
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "$EXPO_PUBLIC_GOOGLE_API_KEY"
+        }
+      }
     },
     "extra": {
       "router": {

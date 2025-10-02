@@ -87,6 +87,31 @@ export default function Page() {
           </View>
         </View>
 
+        {/* Fitness Centers Quick Access */}
+        <View className="mx-6 mb-6">
+          <TouchableOpacity
+            onPress={() => router.push("/fitness-centers")}
+            className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-4 shadow-sm"
+            style={{
+              backgroundColor: "#3b82f6", // Fallback for gradient
+            }}
+          >
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1">
+                <Text className="text-white font-lexend-bold text-lg mb-1">
+                  🏋️ Find Nearby Gyms
+                </Text>
+                <Text className="text-blue-100 font-lexend-medium">
+                  Discover fitness centers near you
+                </Text>
+              </View>
+              <View className="bg-white/20 rounded-full p-2">
+                <Ionicons name="location-outline" size={24} color="white" />
+              </View>
+            </View>
+          </TouchableOpacity>
+        </View>
+
         {/* Last Workout */}
         {lastWorkout && (
           <View className="mx-6 mb-6">
@@ -136,24 +161,6 @@ export default function Page() {
                 <Ionicons name="chevron-forward" size={20} color="#6b7280" />
               </View>
             </TouchableOpacity>
-
-            {/* Start Workout Button */}
-            <View className="mt-6">
-              <CustomButton
-                title="Start Workout"
-                bgVariant="primary"
-                onPress={() => router.push("/workout")}
-                IconLeft={() => (
-                  <Ionicons
-                    name="play"
-                    size={20}
-                    color="white"
-                    className="mr-2"
-                  />
-                )}
-                className="bg-blue-500"
-              />
-            </View>
           </View>
         )}
 
