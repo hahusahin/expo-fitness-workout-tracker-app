@@ -17,11 +17,14 @@
       "expo-secure-store",
       "expo-font"
     ],
-    "name": "fit-app",
+    "name": "Workout Tracker App",
     "slug": "workout-tracker-app",
     "android": {
-      "package": "com.hahusahin.fitapp",
-      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "package": "com.hahusahin.fitnessapp",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
       "config": {
         "googleMaps": {
           "apiKey": "$EXPO_PUBLIC_GOOGLE_API_KEY"
@@ -44,7 +47,7 @@
         "origin": "https://n"
       },
       "eas": {
-        "projectId": "aa52b202-3c30-4138-b3e0-fc4f3f732efc"
+        "projectId": "c6a98400-b81e-487e-96e5-2399ec89a7b9"
       }
     },
     "owner": "hahusahin"
