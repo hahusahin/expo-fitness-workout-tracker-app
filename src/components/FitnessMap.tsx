@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Platform } from "react-native";
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { FitnessCenter } from "@/types/requests";
 import { Ionicons } from "@expo/vector-icons";
@@ -84,10 +84,9 @@ export default function FitnessMap({
     <View className="flex-1 overflow-hidden bg-gray-50" style={style}>
       <MapView
         ref={mapRef}
-        provider={undefined}
+        provider={Platform.OS === "android" ? PROVIDER_GOOGLE : undefined}
         style={styles.map}
         initialRegion={initialRegion}
-        region={initialRegion}
         onMapReady={() => setMapReady(true)}
         showsUserLocation
         showsMyLocationButton
@@ -96,8 +95,8 @@ export default function FitnessMap({
         scrollEnabled
         pitchEnabled
         rotateEnabled
-        loadingEnabled
         moveOnMarkerPress={false}
+        // loadingEnabled
         // loadingIndicatorColor="#3b82f6"
         // loadingBackgroundColor="#f9fafb"
         // showsCompass
