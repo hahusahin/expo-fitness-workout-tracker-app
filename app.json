@@ -21,10 +21,8 @@
     "slug": "workout-tracker-app",
     "android": {
       "package": "com.hahusahin.fitnessapp",
-      "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
-      ],
+      "googleServicesFile": "./google-services.json",
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
       "config": {
         "googleMaps": {
           "apiKey": "$EXPO_PUBLIC_GOOGLE_API_KEY"
@@ -33,13 +31,12 @@
     },
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.hahusahin.fitnessapp",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app needs access to your location to find nearby fitness centers and gyms."
       },
       "config": {
-        "googleMaps": {
-          "apiKey": "$EXPO_PUBLIC_GOOGLE_API_KEY"
-        }
+        "googleMapsApiKey": "$EXPO_PUBLIC_GOOGLE_API_KEY"
       }
     },
     "extra": {

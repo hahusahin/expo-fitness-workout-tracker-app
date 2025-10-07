@@ -13,11 +13,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { useGetWorkouts } from "@/hooks/useWorkouts";
 import CustomButton from "@/components/CustomButton";
 import { formatDate } from "@/utils/timeUtils";
+import { useNotification } from "@/providers/NotificationProvider";
 
 export default function Page() {
   const { user } = useUser();
   const router = useRouter();
   const { data: workouts, isLoading } = useGetWorkouts(user?.id || "");
+
+  // example of passing notification data to screen
+  const { expoPushToken, notification } = useNotification();
 
   // Get most recent workout
   const lastWorkout = workouts?.[0];
@@ -86,6 +90,30 @@ export default function Page() {
             </TouchableOpacity>
           </View>
         </View>
+
+        {/* Just a view for displaying Notification data when it comes to app */}
+        {notification && (
+          <View className="mx-6 mb-6">
+            <View className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 items-center">
+              <View className="bg-green-100 rounded-full p-4 mb-4">
+                <Ionicons
+                  name="notifications-outline"
+                  size={32}
+                  color="#10b981"
+                />
+              </View>
+              <Text className="font-lexend-semibold text-red-500">
+                Latest notification:
+              </Text>
+              <Text className="text-gray-600 font-lexend-medium text-center mb-4">
+                {notification?.request?.content?.title}
+              </Text>
+              <Text className="text-gray-600 font-lexend-medium text-center mb-4">
+                {JSON.stringify(notification?.request?.content?.data, null, 2)}
+              </Text>
+            </View>
+          </View>
+        )}
 
         {/* Fitness Centers Quick Access */}
         <View className="mx-6 mb-6">
