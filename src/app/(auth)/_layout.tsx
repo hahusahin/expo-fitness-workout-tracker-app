@@ -13,7 +13,7 @@ export default function AuthLayout() {
     <SafeAreaView style={{ flex: 1 }} edges={["bottom"]}>
       <KeyboardAvoidingView
         style={{ flex: 1 }}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        //behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 30 : 0}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
