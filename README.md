@@ -6,7 +6,8 @@
  * Creating, starting a custom workout with exercises, history etc..
  * Google Maps integration to show 5 nearest fitness center near to user's location
  * AI integration (get AI recommendation related to an exercise)
- * Push Notifications
+ * Enabled and setup Push Notifications
+ * Upload Photo
    
 ## Techstack
 * React Native
