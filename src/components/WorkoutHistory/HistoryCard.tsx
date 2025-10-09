@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { GetWorkoutsQueryResult } from "@/lib/sanity/types";
+import { WorkoutRecord } from "@/lib/sanity/types";
 import { formatDate, formatDuration } from "@/utils/timeUtils";
 
 interface HistoryCardProps {
-  workout: GetWorkoutsQueryResult[0];
+  workout: WorkoutRecord;
   onPress?: () => void;
 }
 
@@ -40,7 +40,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.8}
-      className="bg-white rounded-2xl mb-4 mx-4 p-4 relative"
+      className="bg-white border border-gray-100 rounded-2xl mb-4 mx-4 p-4 relative"
       style={{
         shadowColor: "#000",
         shadowOffset: {
@@ -52,7 +52,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
         elevation: 4,
       }}
     >
-      {/* Header with title and date */}
+      {/* Header with date */}
       <View className="flex-row justify-between items-start mb-3 pr-6">
         <Text className="text-lg font-bold text-green-600 flex-1">
           {formattedDate}
@@ -100,7 +100,7 @@ const HistoryCard: React.FC<HistoryCardProps> = ({
         )}
       </View>
 
-      {/* Arrow indicator*/}
+      {/* Arrow indicator */}
       <View className="absolute top-3 right-3">
         <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
       </View>

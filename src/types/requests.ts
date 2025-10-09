@@ -1,8 +1,14 @@
 export interface WorkoutPayload {
+  _id?: string; // Optional for updates
   _type: "workout";
   userId: string;
   date: string;
-  duration: number;
+  duration?: number;
+  status: "scheduled" | "in_progress" | "completed" | "cancelled";
+  title?: string;
+  notes?: string;
+  notificationSent?: boolean;
+  calendarEventId?: string;
   exercises: {
     _type: "workoutExercise";
     _key: string;

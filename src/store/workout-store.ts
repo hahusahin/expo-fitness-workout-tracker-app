@@ -25,6 +25,14 @@ interface WorkoutStore {
 
   // These are the actions that can be performed on the state
   addExerciseToWorkout: (exercise: { name: string; sanityId: string }) => void;
+  loadWorkoutWithSets: (exercises: Array<{
+    exercise: { _id: string; name: string };
+    sets?: Array<{
+      repetitions: number;
+      weight: number;
+      weightUnit: "kg" | "lbs";
+    }>;
+  }>) => void;
   removeExerciseFromWorkout: (exerciseId: string) => void;
   addSetToExercise: (exerciseId: string) => void;
   removeSetFromExercise: (exerciseId: string, setId: string) => void;
@@ -58,6 +66,22 @@ export const useWorkoutStore = create<WorkoutStore>()(
           return {
             workoutExercises: [...state.workoutExercises, newExercise],
           };
+        }),
+      loadWorkoutWithSets: (exercises) =>
+        set((state) => {
+          const workoutExercises: WorkoutExercise[] = exercises.map((exerciseData) => ({
+            id: Math.random().toString(),
+            sanityId: exerciseData.exercise._id,
+            name: exerciseData.exercise.name || "Unknown Exercise",
+            sets: (exerciseData.sets || []).map((setData) => ({
+              id: Math.random().toString(),
+              reps: setData.repetitions?.toString() || "",
+              weight: setData.weight?.toString() || "",
+              weightUnit: setData.weightUnit || state.weightUnit,
+              isCompleted: false, // Reset completion status for new workout
+            })),
+          }));
+          return { workoutExercises };
         }),
       removeExerciseFromWorkout: (exerciseId) =>
         set((state) => ({

@@ -7,11 +7,13 @@
  * Google Maps integration to show 5 nearest fitness center near to user's location
  * AI integration (get AI recommendation related to an exercise)
  * Enabled and setup Push Notifications
- * Upload Photo
+ * Upload Photo feature
+ * Calendar Integration (Schedule a workout to native calendar)
    
 ## Techstack
 * React Native
-* Expo Router, Expo API Routes, Expo Location
+* Expo Router, Expo API Routes
+* Expo Location, Expo ImagePicker, Expo Calendar
 * Nativewind (used Tailwind for styling)
 * Sanity (for content management)
 * Tanstack Query for making API calls

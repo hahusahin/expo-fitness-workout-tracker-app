@@ -7,8 +7,13 @@ import { WorkoutPayload } from "@/types/requests";
 export const getWorkoutsQuery =
   defineQuery(`*[_type == "workout" && userId == $userId] | order(date desc) {
     _id,
+    status,
     date,
     duration,
+    title,
+    notes,
+    notificationSent,
+    calendarEventId,
     exercises[] {
       exercise->{
         _id,
@@ -38,21 +43,27 @@ export const useGetWorkouts = (userId: string) => {
   });
 };
 
-interface SaveWorkoutParams {
-  workoutPayload: WorkoutPayload;
-}
-
 export const useSaveWorkout = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ workoutPayload }: SaveWorkoutParams) => {
+    mutationFn: async ({ _id, userId, date, status = "completed", duration, title, notes, calendarEventId, exercises }: WorkoutPayload) => {
       const response = await fetch("/api/save-workout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(workoutPayload),
+        body: JSON.stringify({
+          _id,
+          userId,
+          date,
+          status,
+          duration,
+          title,
+          notes,
+          calendarEventId,
+          exercises,
+        }),
       });
 
       if (!response.ok) {

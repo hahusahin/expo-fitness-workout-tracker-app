@@ -8,7 +8,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
-import React, { useRef, useCallback, useMemo } from "react";
+import React, { useRef, useCallback, useMemo, useState } from "react";
 import { useRouter } from "expo-router";
 import { useStopwatch } from "react-timer-hook";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -20,8 +20,9 @@ import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import ActiveWorkoutExerciseCard from "@/components/ActiveWorkout/ExerciseCard";
 import WorkoutSetCard from "@/components/ActiveWorkout/WorkoutSetCard";
 import ExercisesList from "@/components/ExercisesList";
+import ScheduleWorkoutModal from "@/components/ScheduleWorkoutModal";
 import { useSaveWorkout } from "@/hooks/useWorkouts";
-import { WorkoutPayload } from "@/types/requests";
+import { useCalendar } from "@/hooks/useCalendar";
 
 export default function ActiveWorkout() {
   const { user } = useUser();
@@ -29,6 +30,8 @@ export default function ActiveWorkout() {
   const insets = useSafeAreaInsets();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const saveWorkoutMutation = useSaveWorkout();
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const { requestPermissions, createWorkoutEvent } = useCalendar();
 
   const { seconds, minutes, hours, totalSeconds, reset, pause, start } =
     useStopwatch({
@@ -124,31 +127,32 @@ export default function ActiveWorkout() {
     if (!user?.id) return;
 
     try {
-      const workoutPayload: WorkoutPayload = {
+      const exercises = workoutExercises.map((exercise) => ({
+        _key: exercise.id,
+        _type: "workoutExercise" as const,
+        exercise: {
+          _type: "reference" as const,
+          _ref: exercise.sanityId,
+        },
+        sets: exercise.sets
+          .filter((set) => set.reps && set.weight) // Only include sets with data
+          .map((set) => ({
+            _type: "set" as const,
+            _key: set.id,
+            repetitions: parseInt(set.reps) || 0,
+            weight: parseFloat(set.weight) || 0,
+            weightUnit: set.weightUnit,
+          })),
+      }));
+
+      await saveWorkoutMutation.mutateAsync({
         _type: "workout",
         userId: user.id,
         date: new Date().toISOString(),
+        status: "completed",
         duration: totalSeconds,
-        exercises: workoutExercises.map((exercise) => ({
-          _type: "workoutExercise",
-          _key: exercise.id,
-          exercise: {
-            _type: "reference",
-            _ref: exercise.sanityId,
-          },
-          sets: exercise.sets
-            .filter((set) => set.reps && set.weight) // Only include sets with data
-            .map((set) => ({
-              _type: "set",
-              _key: set.id,
-              repetitions: parseInt(set.reps) || 0,
-              weight: parseFloat(set.weight) || 0,
-              weightUnit: set.weightUnit,
-            })),
-        })),
-      };
-
-      await saveWorkoutMutation.mutateAsync({ workoutPayload });
+        exercises,
+      });
 
       Alert.alert(
         "Workout Saved!",
@@ -165,6 +169,84 @@ export default function ActiveWorkout() {
       );
     } catch (error) {
       Alert.alert("Error", "Failed to save workout. Please try again.");
+    }
+  };
+
+  const handleScheduleWorkout = async (scheduleData: {
+    title: string;
+    scheduledDate: Date;
+    notes?: string;
+  }) => {
+    if (!user?.id) return;
+
+    try {
+      // Check calendar permissions and create calendar event
+      const hasPermission = await requestPermissions();
+      let calendarEventId: string | undefined;
+
+      if (hasPermission) {
+        try {
+          // Calculate end date (1 hour after start)
+          const endDate = new Date(scheduleData.scheduledDate);
+          endDate.setHours(endDate.getHours() + 1);
+
+          calendarEventId = await createWorkoutEvent({
+            title: scheduleData.title,
+            startDate: scheduleData.scheduledDate,
+            endDate,
+            notes: scheduleData.notes,
+            exercises: workoutExercises.map(ex => ex.name),
+          });
+        } catch (calendarError) {
+          console.warn('Failed to create calendar event:', calendarError);
+          // Continue without calendar event
+        }
+      }
+
+      const exercises = workoutExercises.map((exercise) => ({
+        _key: exercise.id,
+        _type: "workoutExercise" as const,
+        exercise: {
+          _type: "reference" as const,
+          _ref: exercise.sanityId,
+        },
+        sets: exercise.sets.map((set) => ({
+          _type: "set" as const,
+          _key: set.id,
+          repetitions: parseInt(set.reps) || 0,
+          weight: parseFloat(set.weight) || 0,
+          weightUnit: set.weightUnit,
+        })),
+      }));
+
+      await saveWorkoutMutation.mutateAsync({
+        _type: "workout",
+        userId: user.id,
+        title: scheduleData.title,
+        date: scheduleData.scheduledDate.toISOString(),
+        status: "scheduled",
+        notes: scheduleData.notes,
+        exercises,
+        ...(calendarEventId && { calendarEventId }),
+      });
+
+      setShowScheduleModal(false);
+      
+      Alert.alert(
+        "Workout Scheduled!",
+        `Your workout "${scheduleData.title}" has been scheduled for ${scheduleData.scheduledDate.toLocaleDateString()} at ${scheduleData.scheduledDate.toLocaleTimeString()}.`,
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              reset(undefined, false);
+              resetWorkout();
+            },
+          },
+        ]
+      );
+    } catch (error) {
+      Alert.alert("Error", "Failed to schedule workout. Please try again.");
     }
   };
 
@@ -362,15 +444,32 @@ export default function ActiveWorkout() {
             />
           </View>
 
-          {/* Start/Complete Workout Button */}
-          <View className="p-4">
+          {/* Start/Complete Workout Buttons */}
+          <View className="p-4 gap-4">
             {!workoutStarted ? (
-              <CustomButton
-                title="Start Workout"
-                bgVariant="success"
-                onPress={handleStartWorkout}
-                disabled={workoutExercises.length === 0}
-              />
+              <>
+                <CustomButton
+                  title="Start Workout"
+                  bgVariant="success"
+                  onPress={handleStartWorkout}
+                  disabled={workoutExercises.length === 0}
+                />
+                <CustomButton
+                  title="Schedule for Later"
+                  bgVariant="outline"
+                  textVariant="primary"
+                  onPress={() => setShowScheduleModal(true)}
+                  disabled={workoutExercises.length === 0}
+                  IconLeft={() => (
+                    <Ionicons
+                      name="calendar-outline"
+                      size={20}
+                      color="#0286FF"
+                      style={{ marginRight: 8 }}
+                    />
+                  )}
+                />
+              </>
             ) : (
               <CustomButton
                 title="Complete Workout"
@@ -406,6 +505,14 @@ export default function ActiveWorkout() {
           inBottomSheet={true}
         />
       </BottomSheetModal>
+
+      {/* Schedule Workout Modal */}
+      <ScheduleWorkoutModal
+        isVisible={showScheduleModal}
+        onClose={() => setShowScheduleModal(false)}
+        onSchedule={handleScheduleWorkout}
+        isLoading={saveWorkoutMutation.isPending}
+      />
     </View>
   );
 }
