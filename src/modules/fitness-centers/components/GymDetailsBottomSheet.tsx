@@ -7,8 +7,8 @@ import {
 } from "@gorhom/bottom-sheet";
 import * as Linking from "expo-linking";
 import { Ionicons } from "@expo/vector-icons";
-import CustomButton from "./CustomButton";
-import { FitnessCenter } from "@/types/requests";
+import CustomButton from "@/shared/components/ui/CustomButton";
+import { FitnessCenter } from "@/shared/types/requests";
 
 interface GymDetailsBottomSheetProps {
   fitnessCenter: FitnessCenter | null;

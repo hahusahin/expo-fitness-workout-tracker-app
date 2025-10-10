@@ -1,8 +1,8 @@
-import { client } from "@/lib/sanity/client";
-import { GetWorkoutsQueryResult } from "@/lib/sanity/types";
+import { client } from "@/shared/services/sanity/client";
+import { GetWorkoutsQueryResult } from "@/shared/services/sanity/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { defineQuery } from "groq";
-import { WorkoutPayload } from "@/types/requests";
+import { saveWorkout } from "../services/workoutService";
 
 export const getWorkoutsQuery =
   defineQuery(`*[_type == "workout" && userId == $userId] | order(date desc) {
@@ -47,32 +47,7 @@ export const useSaveWorkout = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ _id, userId, date, status = "completed", duration, title, notes, calendarEventId, exercises }: WorkoutPayload) => {
-      const response = await fetch("/api/save-workout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          _id,
-          userId,
-          date,
-          status,
-          duration,
-          title,
-          notes,
-          calendarEventId,
-          exercises,
-        }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to save workout");
-      }
-
-      return response.json();
-    },
+    mutationFn: saveWorkout,
     onSuccess: () => {
       // Invalidate workout-related queries to refresh data
       queryClient.invalidateQueries({ queryKey: ["workouts"] });

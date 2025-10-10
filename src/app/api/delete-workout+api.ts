@@ -1,4 +1,4 @@
-import { adminClient } from "@/lib/sanity/client";
+import { adminClient } from "@/shared/services/sanity/client";
 
 export async function DELETE(request: Request) {
   try {

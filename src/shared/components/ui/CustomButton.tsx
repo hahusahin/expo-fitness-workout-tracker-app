@@ -1,4 +1,4 @@
-import { ButtonProps } from "@/types/customComponents";
+import { ButtonProps } from "@/shared/types/customComponents";
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 
 const getBgVariantStyle = (variant: ButtonProps["bgVariant"]) => {

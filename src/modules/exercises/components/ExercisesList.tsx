@@ -1,14 +1,14 @@
 import React, { useState, useMemo } from "react";
 import { View, Text, FlatList, RefreshControl, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import CustomInput from "./CustomInput";
-import ExerciseCard from "./Exercises/ExerciseCard";
-import ErrorState from "./ErrorState";
-import EmptyState from "./EmptyState";
-import ExerciseSkeleton from "./Exercises/ExerciseSkeleton";
 import { useGetExercises } from "../hooks/useExercises";
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ErrorState from "@/shared/components/ui/ErrorState";
+import CustomInput from "@/shared/components/ui/CustomInput";
+import ExerciseSkeleton from "./ExerciseSkeleton";
+import ExerciseCard from "./ExerciseCard";
+import EmptyState from "@/shared/components/ui/EmptyState";
 
 interface ExercisesListProps {
   onExercisePress: (exercise: any) => void;

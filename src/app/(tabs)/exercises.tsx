@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
-import ExercisesList from "../../components/ExercisesList";
+import ExercisesList from "@/modules/exercises/components/ExercisesList";
 
 export default function Exercises() {
   const router = useRouter();

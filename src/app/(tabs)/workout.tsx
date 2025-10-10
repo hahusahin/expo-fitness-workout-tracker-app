@@ -12,17 +12,17 @@ import React, { useRef, useCallback, useMemo, useState } from "react";
 import { useRouter } from "expo-router";
 import { useStopwatch } from "react-timer-hook";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useWorkoutStore } from "@/store/workout-store";
-import CustomButton from "@/components/CustomButton";
+import { useWorkoutStore } from "@/modules/workouts/store/workout-store";
+import CustomButton from "@/shared/components/ui/CustomButton";
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { BottomSheetModal, BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import ActiveWorkoutExerciseCard from "@/components/ActiveWorkout/ExerciseCard";
-import WorkoutSetCard from "@/components/ActiveWorkout/WorkoutSetCard";
-import ExercisesList from "@/components/ExercisesList";
-import ScheduleWorkoutModal from "@/components/ScheduleWorkoutModal";
-import { useSaveWorkout } from "@/hooks/useWorkouts";
-import { useCalendar } from "@/hooks/useCalendar";
+import ActiveWorkoutExerciseCard from "@/modules/workouts/components/ExerciseCard";
+import WorkoutSetCard from "@/modules/workouts/components/WorkoutSetCard";
+import ExercisesList from "@/modules/exercises/components/ExercisesList";
+import ScheduleWorkoutModal from "@/modules/workouts/components/ScheduleWorkoutModal";
+import { useSaveWorkout } from "@/modules/workouts/hooks/useWorkouts";
+import { useCalendar } from "@/modules/workouts/hooks/useCalendar";
 
 export default function ActiveWorkout() {
   const { user } = useUser();

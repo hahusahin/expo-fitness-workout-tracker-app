@@ -9,7 +9,7 @@ import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
-import { NotificationProvider } from "@/providers/NotificationProvider";
+import { NotificationProvider } from "@/shared/contexts/NotificationContext";
 import * as Notifications from "expo-notifications";
 
 const queryClient = new QueryClient({

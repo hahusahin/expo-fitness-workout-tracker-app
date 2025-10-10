@@ -9,8 +9,8 @@ import {
 import { useSignUp } from "@clerk/clerk-expo";
 import { Link, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import CustomInput from "@/components/CustomInput";
-import CustomButton from "@/components/CustomButton";
+import CustomInput from "@/shared/components/ui/CustomInput";
+import CustomButton from "@/shared/components/ui/CustomButton";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
 

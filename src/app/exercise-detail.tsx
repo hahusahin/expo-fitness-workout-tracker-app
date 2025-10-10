@@ -16,15 +16,15 @@ import {
 import { useState, useRef, useCallback, useMemo, useEffect } from "react";
 import Markdown from "react-native-markdown-display";
 
-import { useGetSingleExercise } from "@/hooks/useExercises";
-import ErrorState from "@/components/ErrorState";
+import { useGetSingleExercise } from "@/modules/exercises/hooks/useExercises";
+import ErrorState from "@/shared/components/ui/ErrorState";
 import {
   getDifficultyColorClass,
   getDifficultyBgColor,
-} from "@/utils/difficultyUtils";
-import { urlFor } from "@/lib/sanity/client";
+} from "@/shared/utils/difficultyUtils";
+import { urlFor } from "@/shared/services/sanity/client";
 import { Ionicons } from "@expo/vector-icons";
-import { fetchAIGuidance } from "@/hooks/useAIGuaidance";
+import { fetchAIGuidance } from "@/modules/exercises/hooks/useAIGuaidance";
 import { useMutation } from "@tanstack/react-query";
 
 export default function ExerciseDetailModal() {

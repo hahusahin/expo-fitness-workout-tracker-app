@@ -10,10 +10,10 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
-import { useGetWorkouts } from "@/hooks/useWorkouts";
-import CustomButton from "@/components/CustomButton";
-import { formatDate } from "@/utils/timeUtils";
-import { useNotification } from "@/providers/NotificationProvider";
+import { useGetWorkouts } from "@/modules/workouts/hooks/useWorkouts";
+import CustomButton from "@/shared/components/ui/CustomButton";
+import { formatDate } from "@/shared/utils/timeUtils";
+import { useNotification } from "@/shared/contexts/NotificationContext";
 
 export default function Page() {
   const { user } = useUser();

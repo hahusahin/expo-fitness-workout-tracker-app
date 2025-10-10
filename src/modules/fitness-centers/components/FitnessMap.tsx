@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text, Platform } from "react-native";
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { FitnessCenter } from "@/types/requests";
+import { FitnessCenter } from "@/shared/types/requests";
 import { Ionicons } from "@expo/vector-icons";
 
 interface LocationCoords {

@@ -1,13 +1,13 @@
 import { View, Text, ActivityIndicator } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "@/components/CustomButton";
-import FitnessMap from "@/components/FitnessMap";
-import GymDetailsBottomSheet from "@/components/GymDetailsBottomSheet";
+import CustomButton from "@/shared/components/ui/CustomButton";
+import FitnessMap from "@/modules/fitness-centers/components/FitnessMap";
+import GymDetailsBottomSheet from "@/modules/fitness-centers/components/GymDetailsBottomSheet";
 import { Ionicons } from "@expo/vector-icons";
-import { useLocationPermission } from "@/hooks/useLocationPermission";
+import { useLocationPermission } from "@/modules/fitness-centers/hooks/useLocationPermission";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { FitnessCenter } from "@/types/requests";
+import { FitnessCenter } from "@/shared/types/requests";
 import { useQuery } from "@tanstack/react-query";
 
 export default function FitnessCenters() {

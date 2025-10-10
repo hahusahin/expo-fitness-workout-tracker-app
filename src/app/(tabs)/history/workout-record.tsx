@@ -4,9 +4,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
-import { useDeleteWorkout, useGetWorkouts } from "@/hooks/useWorkouts";
-import { formatDuration } from "@/utils/timeUtils";
-import ExerciseCard from "@/components/WorkoutHistory/ExerciseCard";
+import { useDeleteWorkout, useGetWorkouts } from "@/modules/workouts/hooks/useWorkouts";
+import { formatDuration } from "@/shared/utils/timeUtils";
+import ExerciseCard from "@/modules/workouts/components/WorkoutHistory/ExerciseCard";
 
 export default function WorkoutRecord() {
   const { workoutId } = useLocalSearchParams();

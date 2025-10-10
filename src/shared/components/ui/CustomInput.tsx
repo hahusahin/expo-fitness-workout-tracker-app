@@ -1,4 +1,4 @@
-import { CustomInputProps } from "@/types/customComponents";
+import { CustomInputProps } from "@/shared/types/customComponents";
 import { Image, Text, TextInput, View } from "react-native";
 
 const CustomInput = ({

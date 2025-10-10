@@ -1,4 +1,4 @@
-import { FitnessCenter } from "@/types/requests";
+import { FitnessCenter } from "@/shared/types/requests";
 
 export async function GET(request: Request): Promise<Response> {
   try {

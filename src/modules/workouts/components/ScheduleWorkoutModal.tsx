@@ -2,11 +2,9 @@ import React, { useState, useRef, useCallback } from "react";
 import {
   View,
   Text,
-  Alert,
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
-  ScrollView,
 } from "react-native";
 import {
   BottomSheetModal,
@@ -15,8 +13,8 @@ import {
 } from "@gorhom/bottom-sheet";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
-import CustomButton from "./CustomButton";
-import CustomInput from "./CustomInput";
+import CustomButton from "@/shared/components/ui/CustomButton";
+import CustomInput from "@/shared/components/ui/CustomInput";
 
 interface ScheduleWorkoutModalProps {
   isVisible: boolean;

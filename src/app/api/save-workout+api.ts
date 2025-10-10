@@ -1,5 +1,5 @@
-import { adminClient } from "@/lib/sanity/client";
-import { WorkoutPayload } from "@/types/requests";
+import { adminClient } from "@/shared/services/sanity/client";
+import { WorkoutPayload } from "@/shared/types/requests";
 
 export async function POST(request: Request) {
   try {

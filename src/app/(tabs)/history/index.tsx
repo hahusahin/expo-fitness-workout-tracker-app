@@ -11,15 +11,15 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { useUser } from "@clerk/clerk-expo";
-import { useGetWorkouts, useDeleteWorkout } from "@/hooks/useWorkouts";
-import HistoryCard from "@/components/WorkoutHistory/HistoryCard";
-import HistorySkeleton from "@/components/WorkoutHistory/HistorySkeleton";
-import ErrorState from "@/components/ErrorState";
-import EmptyState from "@/components/EmptyState";
-import { useWorkoutStore } from "@/store/workout-store";
-import { WorkoutRecord } from "@/lib/sanity/types";
-import ScheduledHistoryCard from "@/components/WorkoutHistory/ScheduledHistoryCard";
-import { useCalendar } from "@/hooks/useCalendar";
+import { useGetWorkouts, useDeleteWorkout } from "@/modules/workouts/hooks/useWorkouts";
+import HistoryCard from "@/modules/workouts/components/HistoryCard";
+import HistorySkeleton from "@/modules/workouts/components/HistorySkeleton";
+import ErrorState from "@/shared/components/ui/ErrorState";
+import EmptyState from "@/shared/components/ui/EmptyState";
+import { useWorkoutStore } from "@/modules/workouts/store/workout-store";
+import { WorkoutRecord } from "@/shared/services/sanity/types";
+import ScheduledHistoryCard from "@/modules/workouts/components/ScheduledHistoryCard";
+import { useCalendar } from "@/modules/workouts/hooks/useCalendar";
 
 export default function HistoryPage() {
   const { user } = useUser();

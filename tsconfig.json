@@ -10,8 +10,11 @@
   "extends": "expo/tsconfig.base",
   "include": [
     "global.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     "nativewind-env.d.ts"
+  ],
+  "exclude": [
+    "sanity/**/*"
   ]
 }

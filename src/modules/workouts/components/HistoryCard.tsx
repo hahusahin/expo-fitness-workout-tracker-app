@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { WorkoutRecord } from "@/lib/sanity/types";
-import { formatDate, formatDuration } from "@/utils/timeUtils";
+import { WorkoutRecord } from "@/shared/services/sanity/types";
+import { formatDate, formatDuration } from "@/shared/utils/timeUtils";
 
 interface HistoryCardProps {
   workout: WorkoutRecord;

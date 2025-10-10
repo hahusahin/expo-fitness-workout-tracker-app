@@ -1,12 +1,12 @@
-import CustomButton from "@/components/CustomButton";
-import ProfileAvatar from "@/components/ProfileAvatar";
+import CustomButton from "@/shared/components/ui/CustomButton";
+import ProfileAvatar from "@/modules/profile/components/ProfileAvatar";
 import { useAuth, useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useMemo } from "react";
 import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useGetWorkouts } from "@/hooks/useWorkouts";
-import { usePhotoPicker } from "@/hooks/usePhotoPicker";
+import { useGetWorkouts } from "@/modules/workouts/hooks/useWorkouts";
+import { usePhotoPicker } from "@/modules/profile/hooks/usePhotoPicker";
 import { useMutation } from "@tanstack/react-query";
 
 export default function Page() {

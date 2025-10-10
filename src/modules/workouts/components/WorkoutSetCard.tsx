@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, TextInput } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { WorkoutSet } from "@/store/workout-store";
+import { WorkoutSet } from "@/modules/workouts/store/workout-store";
 
 interface WorkoutSetCardProps {
   set: WorkoutSet;

@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import * as Notifications from "expo-notifications";
 import { EventSubscription } from "expo-modules-core";
-import { registerForPushNotificationsAsync } from "@/utils/registerForPushNotifications";
+import { registerForPushNotificationsAsync } from "@/shared/utils/registerForPushNotifications";
 
 interface NotificationContextType {
   expoPushToken: string | null;

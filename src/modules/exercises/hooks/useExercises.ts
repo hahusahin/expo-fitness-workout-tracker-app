@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { defineQuery } from "groq";
-import { client } from "@/lib/sanity/client";
-import { EXERCISES_QUERYResult } from "@/lib/sanity/types";
+import { client } from "@/shared/services/sanity/client";
+import { EXERCISES_QUERYResult } from "@/shared/services/sanity/types";
 
 // GROQ query to fetch all active exercises
 export const EXERCISES_QUERY =

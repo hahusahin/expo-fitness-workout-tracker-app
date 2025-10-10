@@ -1,9 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Platform, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { WorkoutRecord } from "@/lib/sanity/types";
-import { formatDuration } from "@/utils/timeUtils";
-import CustomButton from "@/components/CustomButton";
+import { WorkoutRecord } from "@/shared/services/sanity/types";
+import CustomButton from "@/shared/components/ui/CustomButton";
 
 interface ScheduledHistoryCardProps {
   workout: WorkoutRecord;
