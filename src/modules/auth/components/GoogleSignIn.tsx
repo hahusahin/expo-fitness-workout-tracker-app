@@ -1,52 +1,31 @@
-import React, { useCallback, useEffect } from "react";
-import * as WebBrowser from "expo-web-browser";
-import * as AuthSession from "expo-auth-session";
-import { useSSO } from "@clerk/clerk-expo";
+import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
-export const useWarmUpBrowser = () => {
-  useEffect(() => {
-    // Preloads the browser for Android devices to reduce authentication load time
-    // See: https://docs.expo.dev/guides/authentication/#improving-user-experience
-    void WebBrowser.warmUpAsync();
-    return () => {
-      // Cleanup: closes browser when component unmounts
-      void WebBrowser.coolDownAsync();
-    };
-  }, []);
-};
+interface GoogleSignInProps {
+  onPress: () => void;
+  isLoading?: boolean;
+}
 
-// Handle any pending authentication sessions
-WebBrowser.maybeCompleteAuthSession();
-
-export default function GoogleSignIn() {
-  const router = useRouter();
-  useWarmUpBrowser();
-
-  // Use the `useSSO()` hook to access the `startSSOFlow()` method
-  const { startSSOFlow } = useSSO();
-
-  const onPress = useCallback(async () => {
-    try {
-      // Start the authentication process by calling `startSSOFlow()`
-      const { createdSessionId, setActive, signIn, signUp } =
-        await startSSOFlow({
-          strategy: "oauth_google",
-          // For web, defaults to current path
-          // For native, you must pass a scheme, like AuthSession.makeRedirectUri({ scheme, path })
-          // For more info, see https://docs.expo.dev/versions/latest/sdk/auth-session/#authsessionmakeredirecturioptions
-          redirectUrl: AuthSession.makeRedirectUri(),
-        });
-
-      // If sign in was successful, set the active session
-      if (createdSessionId) {
-        setActive!({
-          session: createdSessionId,
-          navigate: async ({ session }) => {
-            if (session?.currentTask) {
-              // Check for tasks and navigate to custom UI to help users resolve them
+export default function GoogleSignIn({ onPress, isLoading = false }: GoogleSignInProps) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      disabled={isLoading}
+      className={`bg-white border-2 border-gray-200 rounded-xl py-4 shadow-sm ${
+        isLoading ? 'opacity-50' : ''
+      }`}
+      activeOpacity={0.8}
+    >
+      <View className="flex-row items-center justify-center">
+        <Ionicons name="logo-google" size={20} color="#EA4335" />
+        <Text className="text-gray-900 font-semibold text-lg ml-3">
+          {isLoading ? 'Signing in...' : 'Continue with Google'}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+}
               // See https://clerk.com/docs/custom-flows/overview#session-tasks
               console.log(session?.currentTask);
               return;

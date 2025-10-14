@@ -11,11 +11,14 @@ import { Link, useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import CustomInput from "@/shared/components/ui/CustomInput";
 import CustomButton from "@/shared/components/ui/CustomButton";
+import GoogleSignInButton from "@/modules/auth/components/GoogleSignInButton";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRef, useState } from "react";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 export default function SignUpScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
+  const { signInWithGoogle } = useAuth();
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -256,6 +259,14 @@ export default function SignUpScreen() {
           isLoading={isLoading}
         />
 
+        <View className="my-6 flex-row items-center justify-center">
+          <View className="flex-1 h-px bg-gray-300" />
+          <Text className="mx-4 text-gray-500 font-lexend">or</Text>
+          <View className="flex-1 h-px bg-gray-300" />
+        </View>
+
+        <GoogleSignInButton onPress={signInWithGoogle} />
+
         <View className="mt-4 text-center">
           <Text className="text-gray-500 text-sm">
             By creating an account, you agree to our{" "}
@@ -268,6 +279,14 @@ export default function SignUpScreen() {
             </Text>
           </Text>
         </View>
+
+        <Link
+          href="sign-in"
+          className="text-lg text-center text-general-200 mt-6"
+        >
+          Already have an account?{" "}
+          <Text className="font-lexend-semibold text-green-600">Sign In</Text>
+        </Link>
       </View>
     </ScrollView>
   );

@@ -92,7 +92,7 @@ export default function Page() {
         </View>
 
         {/* Just a view for displaying Notification data when it comes to app */}
-        {notification && (
+        {/* {notification && (
           <View className="mx-6 mb-6">
             <View className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 items-center">
               <View className="bg-green-100 rounded-full p-4 mb-4">
@@ -113,7 +113,7 @@ export default function Page() {
               </Text>
             </View>
           </View>
-        )}
+        )} */}
 
         {/* Fitness Centers Quick Access */}
         <View className="mx-6 mb-6">

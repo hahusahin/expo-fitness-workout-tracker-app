@@ -1,17 +1,16 @@
-import { Alert, ImageBackground, ScrollView, Text, View } from "react-native";
-import { useSignIn, useSignUp } from "@clerk/clerk-expo";
-import { Link, useRouter } from "expo-router";
+import { ImageBackground, ScrollView, Text, View } from "react-native";
+import { Link } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
 import CustomInput from "@/shared/components/ui/CustomInput";
 import CustomButton from "@/shared/components/ui/CustomButton";
+import GoogleSignInButton from "@/modules/auth/components/GoogleSignInButton";
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
+import { useAuth } from "@/modules/auth/hooks/useAuth";
 
 export default function SignIn() {
-  const { signIn, setActive, isLoaded } = useSignIn();
-  const router = useRouter();
+  const { signInWithGoogle, signInWithEmail, isLoading, isLoaded } = useAuth();
 
-  const [isLoading, setIsLoading] = useState(false);
   const [form, setForm] = useState({
     emailAddress: "",
     password: "",
@@ -27,26 +26,7 @@ export default function SignIn() {
       return;
     }
 
-    try {
-      setIsLoading(true);
-      const signInAttempt = await signIn.create({
-        identifier: emailAddress,
-        password,
-      });
-
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/(tabs)");
-      } else {
-        console.error(JSON.stringify(signInAttempt, null, 2));
-        Alert.alert("Error", "Log in failed. Please try again.");
-      }
-    } catch (err) {
-      console.error(JSON.stringify(err, null, 2));
-      Alert.alert("Error", err.errors[0].longMessage);
-    } finally {
-      setIsLoading(false);
-    }
+    signInWithEmail(emailAddress, password);
   };
 
   return (
@@ -100,6 +80,14 @@ export default function SignIn() {
           className="mt-4"
           isLoading={isLoading}
         />
+
+        <View className="my-6 flex-row items-center justify-center">
+          <View className="flex-1 h-px bg-gray-300" />
+          <Text className="mx-4 text-gray-500 font-lexend">or</Text>
+          <View className="flex-1 h-px bg-gray-300" />
+        </View>
+
+        <GoogleSignInButton onPress={signInWithGoogle} />
 
         <Link
           href="sign-up"
