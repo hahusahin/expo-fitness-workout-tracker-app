@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { NotificationProvider } from "@/shared/contexts/NotificationContext";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 import * as Notifications from "expo-notifications";
 
 const queryClient = new QueryClient({
@@ -81,11 +82,13 @@ export default function Layout() {
     <NotificationProvider>
       <ClerkProvider tokenCache={tokenCache}>
         <QueryClientProvider client={queryClient}>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <BottomSheetModalProvider>
-              <AppNavigator />
-            </BottomSheetModalProvider>
-          </GestureHandlerRootView>
+          <KeyboardProvider>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <BottomSheetModalProvider>
+                <AppNavigator />
+              </BottomSheetModalProvider>
+            </GestureHandlerRootView>
+          </KeyboardProvider>
         </QueryClientProvider>
       </ClerkProvider>
     </NotificationProvider>

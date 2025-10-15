@@ -4,7 +4,9 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function TabLayout() {
   return (
-    <Tabs>
+    <Tabs
+    //  screenOptions={{ tabBarHideOnKeyboard: true }}
+    >
       <Tabs.Screen
         name="index"
         options={{

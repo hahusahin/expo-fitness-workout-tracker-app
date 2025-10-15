@@ -5,8 +5,6 @@ import {
   Platform,
   TouchableOpacity,
   StatusBar,
-  ScrollView,
-  KeyboardAvoidingView,
 } from "react-native";
 import React, { useRef, useCallback, useMemo, useState } from "react";
 import { useRouter } from "expo-router";
@@ -23,6 +21,7 @@ import ExercisesList from "@/modules/exercises/components/ExercisesList";
 import ScheduleWorkoutModal from "@/modules/workouts/components/ScheduleWorkoutModal";
 import { useSaveWorkout } from "@/modules/workouts/hooks/useWorkouts";
 import { useCalendar } from "@/modules/workouts/hooks/useCalendar";
+import { KeyboardAwareScrollView } from "react-native-keyboard-controller";
 
 export default function ActiveWorkout() {
   const { user } = useUser();
@@ -195,10 +194,10 @@ export default function ActiveWorkout() {
             startDate: scheduleData.scheduledDate,
             endDate,
             notes: scheduleData.notes,
-            exercises: workoutExercises.map(ex => ex.name),
+            exercises: workoutExercises.map((ex) => ex.name),
           });
         } catch (calendarError) {
-          console.warn('Failed to create calendar event:', calendarError);
+          console.warn("Failed to create calendar event:", calendarError);
           // Continue without calendar event
         }
       }
@@ -231,10 +230,12 @@ export default function ActiveWorkout() {
       });
 
       setShowScheduleModal(false);
-      
+
       Alert.alert(
         "Workout Scheduled!",
-        `Your workout "${scheduleData.title}" has been scheduled for ${scheduleData.scheduledDate.toLocaleDateString()} at ${scheduleData.scheduledDate.toLocaleTimeString()}.`,
+        `Your workout "${
+          scheduleData.title
+        }" has been scheduled for ${scheduleData.scheduledDate.toLocaleDateString()} at ${scheduleData.scheduledDate.toLocaleTimeString()}.`,
         [
           {
             text: "OK",
@@ -346,142 +347,127 @@ export default function ActiveWorkout() {
         </View>
       </View>
 
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        // behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 30 : 0}
-      >
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled"
-        >
-          {/* Selected Exercises */}
-          {workoutExercises.length > 0 ? (
-            <View className="pt-4">
-              {workoutExercises.map((exercise) => (
-                <View key={exercise.id} className="mb-6">
-                  {/* Exercise Card */}
-                  <ActiveWorkoutExerciseCard
-                    exercise={exercise}
-                    onPress={() => handleExercisePress(exercise)}
-                    onDelete={() => handleRemoveExercise(exercise.id)}
-                  />
+      <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        {/* Selected Exercises */}
+        {workoutExercises.length > 0 ? (
+          <View className="pt-4">
+            {workoutExercises.map((exercise) => (
+              <View key={exercise.id} className="mb-6">
+                {/* Exercise Card */}
+                <ActiveWorkoutExerciseCard
+                  exercise={exercise}
+                  onPress={() => handleExercisePress(exercise)}
+                  onDelete={() => handleRemoveExercise(exercise.id)}
+                />
 
-                  {/* Sets Section */}
-                  <View className="px-4">
-                    {exercise.sets.length > 0 ? (
-                      exercise.sets.map((set, setIndex) => (
-                        <WorkoutSetCard
-                          key={set.id}
-                          set={set}
-                          setIndex={setIndex}
-                          onUpdateReps={(reps) =>
-                            updateSet(exercise.id, set.id, { reps })
-                          }
-                          onUpdateWeight={(weight) =>
-                            updateSet(exercise.id, set.id, { weight })
-                          }
-                          onToggleComplete={() =>
-                            toggleSetCompletion(exercise.id, set.id)
-                          }
-                          onDelete={() =>
-                            removeSetFromExercise(exercise.id, set.id)
-                          }
-                          weightUnit={weightUnit}
-                          workoutStarted={workoutStarted}
-                        />
-                      ))
-                    ) : (
-                      <View className="bg-gray-50 rounded-lg p-4 mb-3">
-                        <Text className="text-gray-600 text-center font-lexend-medium">
-                          No sets added yet. Tap "Add Set" to get started.
-                        </Text>
-                      </View>
-                    )}
-
-                    {/* Add Set Button */}
-                    <TouchableOpacity
-                      onPress={() => addSetToExercise(exercise.id)}
-                      className="bg-blue-100 rounded-lg p-3 mb-2 flex-row items-center justify-center"
-                    >
-                      <Ionicons name="add" size={20} color="#3b82f6" />
-                      <Text className="text-blue-600 font-lexend-semibold ml-2">
-                        Add Set
+                {/* Sets Section */}
+                <View className="px-4">
+                  {exercise.sets.length > 0 ? (
+                    exercise.sets.map((set, setIndex) => (
+                      <WorkoutSetCard
+                        key={set.id}
+                        set={set}
+                        setIndex={setIndex}
+                        onUpdateReps={(reps) =>
+                          updateSet(exercise.id, set.id, { reps })
+                        }
+                        onUpdateWeight={(weight) =>
+                          updateSet(exercise.id, set.id, { weight })
+                        }
+                        onToggleComplete={() =>
+                          toggleSetCompletion(exercise.id, set.id)
+                        }
+                        onDelete={() =>
+                          removeSetFromExercise(exercise.id, set.id)
+                        }
+                        weightUnit={weightUnit}
+                        workoutStarted={workoutStarted}
+                      />
+                    ))
+                  ) : (
+                    <View className="bg-gray-50 rounded-lg p-4 mb-3">
+                      <Text className="text-gray-600 text-center font-lexend-medium">
+                        No sets added yet. Tap "Add Set" to get started.
                       </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
-            </View>
-          ) : (
-            <View className="flex-1 justify-center items-center p-8">
-              <Ionicons name="fitness-outline" size={64} color="#9ca3af" />
-              <Text className="text-3xl font-lexend-semibold text-gray-900 mt-4 mb-2">
-                Ready to Train?
-              </Text>
-              <Text className="text-gray-600 text-center text-lg font-lexend mb-6">
-                Add exercises to your workout to get started.
-              </Text>
-            </View>
-          )}
-
-          {/* Add Exercise Button */}
-          <View className="p-4">
-            <CustomButton
-              title="Add Exercise"
-              bgVariant="outline"
-              textVariant="primary"
-              onPress={handleAddExercise}
-              IconLeft={() => (
-                <Ionicons
-                  name="add"
-                  size={20}
-                  color="#0286FF"
-                  className="mr-2"
-                />
-              )}
-            />
-          </View>
-
-          {/* Start/Complete Workout Buttons */}
-          <View className="p-4 gap-4">
-            {!workoutStarted ? (
-              <>
-                <CustomButton
-                  title="Start Workout"
-                  bgVariant="success"
-                  onPress={handleStartWorkout}
-                  disabled={workoutExercises.length === 0}
-                />
-                <CustomButton
-                  title="Schedule for Later"
-                  bgVariant="outline"
-                  textVariant="primary"
-                  onPress={() => setShowScheduleModal(true)}
-                  disabled={workoutExercises.length === 0}
-                  IconLeft={() => (
-                    <Ionicons
-                      name="calendar-outline"
-                      size={20}
-                      color="#0286FF"
-                      style={{ marginRight: 8 }}
-                    />
+                    </View>
                   )}
-                />
-              </>
-            ) : (
-              <CustomButton
-                title="Complete Workout"
-                bgVariant="success"
-                onPress={saveWorkout}
-                isLoading={saveWorkoutMutation.isPending}
-                disabled={!allSetsCompleted}
-              />
-            )}
+
+                  {/* Add Set Button */}
+                  <TouchableOpacity
+                    onPress={() => addSetToExercise(exercise.id)}
+                    className="bg-blue-100 rounded-lg p-3 mb-2 flex-row items-center justify-center"
+                  >
+                    <Ionicons name="add" size={20} color="#3b82f6" />
+                    <Text className="text-blue-600 font-lexend-semibold ml-2">
+                      Add Set
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+        ) : (
+          <View className="flex-1 justify-center items-center p-8">
+            <Ionicons name="fitness-outline" size={64} color="#9ca3af" />
+            <Text className="text-3xl font-lexend-semibold text-gray-900 mt-4 mb-2">
+              Ready to Train?
+            </Text>
+            <Text className="text-gray-600 text-center text-lg font-lexend mb-6">
+              Add exercises to your workout to get started.
+            </Text>
+          </View>
+        )}
+
+        {/* Add Exercise Button */}
+        <View className="p-4">
+          <CustomButton
+            title="Add Exercise"
+            bgVariant="outline"
+            textVariant="primary"
+            onPress={handleAddExercise}
+            IconLeft={() => (
+              <Ionicons name="add" size={20} color="#0286FF" className="mr-2" />
+            )}
+          />
+        </View>
+
+        {/* Start/Complete Workout Buttons */}
+        <View className="p-4 gap-4">
+          {!workoutStarted ? (
+            <>
+              <CustomButton
+                title="Start Workout"
+                bgVariant="success"
+                onPress={handleStartWorkout}
+                disabled={workoutExercises.length === 0}
+              />
+              <CustomButton
+                title="Schedule for Later"
+                bgVariant="outline"
+                textVariant="primary"
+                onPress={() => setShowScheduleModal(true)}
+                disabled={workoutExercises.length === 0}
+                IconLeft={() => (
+                  <Ionicons
+                    name="calendar-outline"
+                    size={20}
+                    color="#0286FF"
+                    style={{ marginRight: 8 }}
+                  />
+                )}
+              />
+            </>
+          ) : (
+            <CustomButton
+              title="Complete Workout"
+              bgVariant="success"
+              onPress={saveWorkout}
+              isLoading={saveWorkoutMutation.isPending}
+              disabled={!allSetsCompleted}
+            />
+          )}
+        </View>
+      </KeyboardAwareScrollView>
 
       {/* Exercise Selection Bottom Sheet */}
       <BottomSheetModal

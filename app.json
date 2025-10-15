@@ -3,6 +3,11 @@
     "scheme": "exp+fit-app",
     "userInterfaceStyle": "automatic",
     "orientation": "default",
+    "splash": {
+      "image": "src/assets/images/splash-screen-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "web": {
       "output": "server"
     },
@@ -27,6 +32,7 @@
     "name": "Workout Tracker App",
     "slug": "workout-tracker-app",
     "android": {
+      "softwareKeyboardLayoutMode": "pan",
       "package": "com.hahusahin.fitnessapp",
       "googleServicesFile": "./google-services.json",
       "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
