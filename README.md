@@ -1,5 +1,6 @@
 # Workout Tracking App with React Native / Expo
  * In this project, I've developed a workout tracking mobile app using expo.
+ * Implemented Domain Driven Design (DDD) Architecture.
 
 ## Features
  * Authentication using Clerk
