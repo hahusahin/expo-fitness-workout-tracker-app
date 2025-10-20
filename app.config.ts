@@ -3,9 +3,11 @@ import { ExpoConfig, ConfigContext } from "expo/config";
 export default ({ config }: ConfigContext): ExpoConfig => {
   // Validate required environment variables
   const googleApiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
+
+  // For builds, provide a fallback or make it optional
   if (!googleApiKey) {
-    throw new Error(
-      "EXPO_PUBLIC_GOOGLE_API_KEY is required in environment variables"
+    console.warn(
+      "⚠️  EXPO_PUBLIC_GOOGLE_API_KEY not found. Google Maps features will be disabled."
     );
   }
 
@@ -18,12 +20,21 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     userInterfaceStyle: "automatic",
     orientation: "default",
     owner: "hahusahin",
-    splash: {
-      image: "src/assets/images/splash-screen-icon.png",
-      resizeMode: "contain",
-      backgroundColor: "#ffffff",
-    },
+    platforms: ["ios", "android"], // Explicitly exclude web
     plugins: [
+      [
+        "expo-splash-screen",
+        {
+          image: "./src/assets/icons/splash-light.png",
+          // imageWidth: 200
+          resizeMode: "contain",
+          backgroundColor: "#ffffff",
+          dark: {
+            image: "./src/assets/icons/splash-dark.png",
+            backgroundColor: "#000000",
+          },
+        },
+      ],
       [
         "expo-router",
         {
@@ -53,6 +64,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           apiKey: googleApiKey,
         },
       },
+      adaptiveIcon: {
+        foregroundImage: "./src/assets/icons/android-adaptive.png",
+        monochromeImage: "./src/assets/icons/android-adaptive.png",
+        backgroundColor: "#FFFFFF",
+      },
     },
     ios: {
       supportsTablet: true,
@@ -63,6 +79,11 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       },
       config: {
         googleMapsApiKey: googleApiKey,
+      },
+      icon: {
+        light: "./src/assets/icons/ios-light.png",
+        dark: "./src/assets/icons/ios-dark.png",
+        tinted: "./src/assets/icons/ios-tinted.png",
       },
     },
     web: {
