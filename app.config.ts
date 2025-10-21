@@ -1,26 +1,28 @@
 import { ExpoConfig, ConfigContext } from "expo/config";
 
-export default ({ config }: ConfigContext): ExpoConfig => {
-  // Validate required environment variables
-  const googleApiKey = process.env.EXPO_PUBLIC_GOOGLE_API_KEY;
+const googleApiKey = process.env.GOOGLE_PLACES_API_KEY;
+const appVariant = process.env.APP_VARIANT;
+// App config for production environment.
+const APP_NAME = "Workout Tracker";
+const BUNDLE_IDENTIFIER = "com.hahusahin.fitnessapp"; // iOS bundle identifier
+const PACKAGE_NAME = "com.hahusahin.fitnessapp"; // Android package name
+const SCHEME = "workout-tracker";
 
-  // For builds, provide a fallback or make it optional
-  if (!googleApiKey) {
-    console.warn(
-      "⚠️  EXPO_PUBLIC_GOOGLE_API_KEY not found. Google Maps features will be disabled."
-    );
-  }
+export default ({ config }: ConfigContext): ExpoConfig => {
+  const { name, bundleIdentifier, scheme } = getDynamicAppConfig(
+    (appVariant as "development" | "preview" | "production") || "development"
+  );
 
   return {
     ...config,
-    name: "Workout Tracker App",
+    name,
     slug: "workout-tracker-app",
     version: "1.0.0",
-    scheme: "exp+fit-app",
+    scheme,
     userInterfaceStyle: "automatic",
     orientation: "default",
     owner: "hahusahin",
-    platforms: ["ios", "android"], // Explicitly exclude web
+    platforms: ["ios", "android"], // Explicitly excluded web
     plugins: [
       [
         "expo-splash-screen",
@@ -35,12 +37,13 @@ export default ({ config }: ConfigContext): ExpoConfig => {
           },
         },
       ],
-      [
-        "expo-router",
-        {
-          origin: "https://n",
-        },
-      ],
+      "expo-router",
+      // [
+      //   "expo-router",
+      //   {
+      //     origin: "https://n",
+      //   },
+      // ],
       "expo-web-browser",
       "expo-secure-store",
       "expo-font",
@@ -56,7 +59,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     ],
     android: {
       softwareKeyboardLayoutMode: "pan",
-      package: "com.hahusahin.fitnessapp",
+      package: PACKAGE_NAME,
       googleServicesFile: "./google-services.json",
       permissions: ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
       config: {
@@ -72,7 +75,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.hahusahin.fitnessapp",
+      bundleIdentifier,
       infoPlist: {
         NSLocationWhenInUseUsageDescription:
           "This app needs access to your location to find nearby fitness centers and gyms.",
@@ -86,16 +89,47 @@ export default ({ config }: ConfigContext): ExpoConfig => {
         tinted: "./src/assets/icons/ios-tinted.png",
       },
     },
-    web: {
-      output: "server",
-    },
+    // Removed web configuration - mobile-only app
+    // web: {
+    //   output: "server",
+    // },
     extra: {
-      router: {
-        origin: "https://n",
-      },
+      // router: {
+      //   origin: "https://n",
+      // },
       eas: {
         projectId: "c6a98400-b81e-487e-96e5-2399ec89a7b9",
       },
     },
+  };
+};
+
+// Dynamically configure the app based on the environment.
+export const getDynamicAppConfig = (
+  environment: "development" | "preview" | "production"
+) => {
+  if (environment === "production") {
+    return {
+      name: APP_NAME,
+      bundleIdentifier: BUNDLE_IDENTIFIER,
+      // packageName: PACKAGE_NAME,
+      scheme: SCHEME,
+    };
+  }
+
+  if (environment === "preview") {
+    return {
+      name: `${APP_NAME} Preview`,
+      bundleIdentifier: `${BUNDLE_IDENTIFIER}.preview`,
+      // packageName: `${PACKAGE_NAME}.preview`,
+      scheme: `${SCHEME}-prev`,
+    };
+  }
+
+  return {
+    name: `${APP_NAME} Development`,
+    bundleIdentifier: `${BUNDLE_IDENTIFIER}.dev`,
+    // packageName: `${PACKAGE_NAME}.dev`,
+    scheme: `${SCHEME}-dev`,
   };
 };

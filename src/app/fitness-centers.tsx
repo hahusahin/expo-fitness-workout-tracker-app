@@ -1,6 +1,5 @@
 import { View, Text, ActivityIndicator } from "react-native";
 import React, { useRef, useState, useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "@/shared/components/ui/CustomButton";
 import FitnessMap from "@/modules/fitness-centers/components/FitnessMap";
 import GymDetailsBottomSheet from "@/modules/fitness-centers/components/GymDetailsBottomSheet";
@@ -9,24 +8,18 @@ import { useLocationPermission } from "@/modules/fitness-centers/hooks/useLocati
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { FitnessCenter } from "@/shared/types/requests";
 import { useQuery } from "@tanstack/react-query";
+import { searchNearbyFitnessCenters } from "@/modules/fitness-centers/services/placesService";
 
 export default function FitnessCenters() {
   const { location, loading, error, requestLocation } = useLocationPermission();
 
   const { data: fitnessCenters, isLoading: centersLoading } = useQuery({
     queryKey: ["nearbyFitnessCenters", location],
-    queryFn: async (): Promise<FitnessCenter[]> => {
-      const apiUrl = `/api/nearest-gyms?latitude=${location.latitude}&longitude=${location.longitude}`;
-
-      const response = await fetch(apiUrl);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch fitness centers");
-      }
-
-      return data || [];
-    },
+    queryFn: async (): Promise<FitnessCenter[]> =>
+      searchNearbyFitnessCenters({
+        location,
+      }),
+    enabled: !!location,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -79,26 +72,19 @@ export default function FitnessCenters() {
     );
 
   return (
-    <SafeAreaView edges={["bottom"]} className="flex-1 bg-gray-50">
-      {/* Header */}
-      <View className="px-6 py-4 bg-white border-b border-gray-100">
-        {centersLoading && (
+    <View className="flex-1 bg-gray-50">
+      {centersLoading && (
+        <View className="px-6 py-4 bg-white border-b border-gray-100">
           <Text className="text-blue-600 text-center font-lexend-medium text-sm mt-2">
             Searching for nearby gyms...
           </Text>
-        )}
-        {fitnessCenters?.length > 0 && (
-          <Text className="text-green-600 text-center font-lexend-medium text-sm mt-2">
-            Found {fitnessCenters.length} fitness centers
-          </Text>
-        )}
-      </View>
-
+        </View>
+      )}
       {/* Map View */}
       {location && (
         <FitnessMap
           userLocation={location}
-          fitnessCenters={fitnessCenters}
+          fitnessCenters={fitnessCenters || []}
           onFitnessCenterPress={handleGymPress}
         />
       )}
@@ -109,6 +95,6 @@ export default function FitnessCenters() {
         fitnessCenter={selectedGym}
         onClose={handleCloseBottomSheet}
       />
-    </SafeAreaView>
+    </View>
   );
 }

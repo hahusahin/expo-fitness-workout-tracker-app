@@ -10,7 +10,7 @@ function Layout() {
         options={{
           headerShown: true,
           headerTitle: "Workout Record",
-          headerBackTitle: "History",
+          // headerBackTitle: "History",
         }}
       />
     </Stack>

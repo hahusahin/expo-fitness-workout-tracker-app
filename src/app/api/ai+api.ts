@@ -33,7 +33,7 @@ Keep spacing between the headings and the content.
 Always use headings and subheadings.`;
 
     // Get API key from environment
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY;
 
     if (!apiKey) {
       return Response.json(

@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
@@ -59,9 +58,9 @@ export default function WorkoutRecord() {
 
   if (isLoading || !workout) {
     return (
-      <SafeAreaView className="flex-1 bg-gray-50 justify-center items-center">
+      <View className="flex-1 bg-gray-50 justify-center items-center">
         <Text className="text-gray-600">Loading workout details...</Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
