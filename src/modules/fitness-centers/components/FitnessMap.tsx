@@ -24,6 +24,7 @@ export default function FitnessMap({
 }: FitnessMapProps) {
   const mapRef = React.useRef<MapView>(null);
   const [mapReady, setMapReady] = React.useState(false);
+  const [shouldRenderMarkers, setShouldRenderMarkers] = React.useState(false);
 
   // Calculate region to fit all markers
   const calculateRegion = () => {
@@ -71,14 +72,25 @@ export default function FitnessMap({
     }
   };
 
+  // Delay marker rendering until map is fully ready
+  React.useEffect(() => {
+    if (mapReady) {
+      // Small delay to ensure map is fully mounted before adding markers
+      const timer = setTimeout(() => {
+        setShouldRenderMarkers(true);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [mapReady]);
+
   React.useEffect(() => {
     // Animate to show all markers when map is ready or fitness centers change
-    if (mapReady) {
+    if (mapReady && shouldRenderMarkers) {
       setTimeout(() => {
         animateToFitAllMarkers();
       }, 500);
     }
-  }, [userLocation, mapReady, fitnessCenters]);
+  }, [userLocation, mapReady, shouldRenderMarkers, fitnessCenters]);
 
   return (
     <View className="flex-1 overflow-hidden bg-gray-50" style={style}>
@@ -102,8 +114,8 @@ export default function FitnessMap({
         // showsCompass
         // showsScale={false}
       >
-        {/* Fitness Center Markers - Default style */}
-        {fitnessCenters.map((center) => (
+        {/* Fitness Center Markers - Only render when map is ready */}
+        {shouldRenderMarkers && fitnessCenters.map((center) => (
           <Marker
             key={center.id}
             coordinate={center.location}

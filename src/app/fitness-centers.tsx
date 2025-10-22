@@ -80,14 +80,14 @@ export default function FitnessCenters() {
           </Text>
         </View>
       )}
-      {/* Map View */}
-      {location && (
+      {/* Map View - Only render when location is available */}
+      {location ? (
         <FitnessMap
           userLocation={location}
           fitnessCenters={fitnessCenters || []}
           onFitnessCenterPress={handleGymPress}
         />
-      )}
+      ) : null}
 
       {/* Gym Details Modal */}
       <GymDetailsBottomSheet

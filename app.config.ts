@@ -56,6 +56,14 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             "The app accesses your camera to let you take a profile picture.",
         },
       ],
+      [
+        "@sentry/react-native/expo",
+        {
+          url: "https://sentry.io/",
+          project: "workout-tracker",
+          organization: "hhs-ql",
+        },
+      ],
     ],
     android: {
       softwareKeyboardLayoutMode: "pan",

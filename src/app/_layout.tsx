@@ -12,6 +12,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { NotificationProvider } from "@/shared/contexts/NotificationContext";
 import { KeyboardProvider } from "react-native-keyboard-controller";
 import * as Notifications from "expo-notifications";
+import * as Sentry from "@sentry/react-native";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -30,7 +31,25 @@ Notifications.setNotificationHandler({
     shouldShowBanner: true,
     shouldShowList: true,
   }),
-})
+});
+
+Sentry.init({
+  dsn: "https://c39788999c5968760d8c49b370368b20@o4510227954794496.ingest.de.sentry.io/4510231696506960",
+
+  // Adds more context data to events (IP address, cookies, user, etc.)
+  // For more information, visit: https://docs.sentry.io/platforms/react-native/data-management/data-collected/
+  sendDefaultPii: true,
+
+  // Enable Logs
+  enableLogs: true,
+
+  // Configure Session Replay
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1,
+  integrations: [Sentry.mobileReplayIntegration()],
+
+  spotlight: __DEV__,
+});
 
 function AppNavigator() {
   const { isLoaded, isSignedIn } = useAuth();
@@ -77,10 +96,13 @@ function AppNavigator() {
   );
 }
 
-export default function Layout() {
+function Layout() {
   return (
     <NotificationProvider>
-      <ClerkProvider tokenCache={tokenCache}>
+      <ClerkProvider
+        tokenCache={tokenCache}
+        publishableKey={process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!}
+      >
         <QueryClientProvider client={queryClient}>
           <KeyboardProvider>
             <GestureHandlerRootView style={{ flex: 1 }}>
@@ -94,3 +116,5 @@ export default function Layout() {
     </NotificationProvider>
   );
 }
+
+export default Sentry.wrap(Layout);
